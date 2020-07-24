@@ -16,13 +16,13 @@ VERSION
 	- Input: none
 	- Output: Content to display how many day are left until the events start. 
 	- SQL Tables:
-	- - node__field_event_date 'date'
-	- - node_field_data 'title'
+	   - node__field_event_date 'date'
+	   - node_field_data 'title'
 	
-	Output logic:
-		- Event in future display: 12 days left until event starts.
-		- Event in past display: This event already passed.
-		- Event happening today display: This event is happening today.
+	Output logic:<br />
+	- Event in future display: 12 days left until event starts. 
+	- Event in past display: This event already passed. 
+	- Event happening today display: This event is happening today.
 	
 --------------------------------
 INSTALL
