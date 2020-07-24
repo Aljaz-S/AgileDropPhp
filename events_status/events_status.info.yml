@@ -1,0 +1,7 @@
+name: Events Status
+type: module
+description: Generates events status content.
+core: 8.x
+package: Custom
+dependencies:
+  - block
