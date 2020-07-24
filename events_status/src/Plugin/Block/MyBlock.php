@@ -8,13 +8,15 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Provides content for a block with events status.
+ * Provides a block with events status.
  *
  */
 class MyBlock extends BlockBase {
+  /**
+   * {@inheritdoc}
+   */
   public function build() {
-	  
-	# Create date variables
+    # Create date variables
 	$current_date = date("Y-m-d");
 	$datetime1 = date_create($current_date);
 	$content = "";
@@ -59,19 +61,27 @@ class MyBlock extends BlockBase {
         'max-age' => 0, // no cache please
       ]
     ];
-	
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function blockAccess(AccountInterface $account) {
     return AccessResult::allowedIfHasPermission($account, 'access content');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function blockForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
 
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['my_block_settings'] = $form_state->getValue('my_block_settings');
   }
