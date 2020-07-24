@@ -17,8 +17,8 @@ VERSION
 	- Input: none
 	- Output: Content to display how many day are left until the events start. 
 	- SQL Tables:
-	- - node__field_event_date <date>
-	- - node_field_data <title>
+	- - node__field_event_date 'date'
+	- - node_field_data 'title'
 	
 --------------------------------
 INSTALL
