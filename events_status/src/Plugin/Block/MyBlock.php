@@ -8,15 +8,19 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Provides a block with events status.
+ * Provides a block with a simple text.
  *
+ * @Block(
+ *   id = "my_block_example_block",
+ *   admin_label = @Translation("My block"),
+ * )
  */
 class MyBlock extends BlockBase {
   /**
    * {@inheritdoc}
    */
   public function build() {
-    # Create date variables
+	# Create date variables
 	$current_date = date("Y-m-d");
 	$datetime1 = date_create($current_date);
 	$content = "";
@@ -24,7 +28,7 @@ class MyBlock extends BlockBase {
 	# SQL to fetch dates and titles of all events, if getting result the while function is executed process recived data
 	$sql = "SELECT c.title AS Title, d.field_event_date_value AS Date FROM node__field_event_date d INNER JOIN node_field_data c ON c.nid = d.entity_id order by d.field_event_date_value desc;";
 	$result = db_query($sql);
-
+	
 	#TO DO: Properly check if you got any values from DB.
 	if ($result) {
 		while ($row = $result->fetchAssoc()) {
@@ -52,7 +56,7 @@ class MyBlock extends BlockBase {
 		}
 	} else {
 		$content = "There is no event data available at the moment!";
-	}	
+	}
 	
     return [
 	  '#title' => 'Events Status',
