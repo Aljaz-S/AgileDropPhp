@@ -12,13 +12,13 @@ The block should not be cached.
 VERSION
 --------------------------------
 - 1.0 
-	# Name: Events Status
-	# Date: 24.7.2020
-	# Input: none
-	# Output: Content to display how many day are left until the events start. 
-	# SQL Tables:
-	# - node__field_event_date <date>
-	# - node_field_data <title>
+	- Name: Events Status
+	- Date: 24.7.2020
+	- Input: none
+	- Output: Content to display how many day are left until the events start. 
+	- SQL Tables:
+	-- node__field_event_date <date>
+	-- node_field_data <title>
 	
 --------------------------------
 INSTALL
