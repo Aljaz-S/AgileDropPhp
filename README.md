@@ -5,10 +5,15 @@ Create a service and write a method which gets a date as a parameter and returns
 
 The block should not be cached.
 
+--------------------------------
+TO DO
+--------------------------------
+- Add proper checking if result from DB returns any value
 
 --------------------------------
 INSTALL
 --------------------------------
 - Source the repositroy to drupal "core/modules/custom"
-- Nagivate to administration install module
-- 
+- Nagivate to administration install module Administration -> Extend, find "Events Status" and install it
+- After successfully installation navigate to Structure -> Block and add block to desired location
+
