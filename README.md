@@ -2,17 +2,18 @@
 --------------------------------
 DESCRIPTION
 --------------------------------
-Create a custom block which will be displayed in the sidebar on event pages. The block should display how many days are left until the event starts, example: ‘12 days left until event starts’. If the event is going to happen on the current day display 'This event is happening today'. If the event has ended, display ‘This event already passed.’.
+Custom block which will be displayed in the sidebar on event pages. The block is displaying how many days are left until the event starts, example: ‘12 days left until event starts’. If the event is going to happen on the current day display 'This event is happening today'. If the event has ended, display ‘This event already passed.’.
 
-Create a service and write a method which gets a date as a parameter and returns a value, which is then used to display correct string in the block.
-
-The block should not be cached.
 
 --------------------------------
 VERSION
 --------------------------------
 - 1.0 	
 	- Date: 24.7.2020
+	- Type: module
+	- Dependencies: block
+	- Core: 8.x
+	- Cached: no
 	- Input: none
 	- Output: Content to display how many day are left until the events start. 
 	- SQL Tables:
