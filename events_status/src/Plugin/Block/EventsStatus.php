@@ -7,6 +7,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 
+
 /**
  * Provides a block with events status content.
  *
@@ -20,43 +21,56 @@ class EventsStatus extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-	# Create date variables
-	$current_date = date("Y-m-d");
-	$datetime1 = date_create($current_date);
-	$content = "";
 	
-	# SQL to fetch dates and titles of all events, if getting result the while function is executed process recived data
-	$sql = "SELECT c.title AS Event_Title, d.field_event_date_value AS Event_Date FROM node__field_event_date d INNER JOIN node_field_data c ON c.nid = d.entity_id order by d.field_event_date_value desc;";
-	$result = db_query($sql)->fetchAll();
+	/*
+	*	Set node information and custom secrives date calculator
+	*/
+	$node = \Drupal::routeMatch()->getParameter('node');
+	$service = \Drupal::service('events_status.date_calculator');
 	
-	if (!empty($result)) {		
-		foreach($result as $value){
-			
-			$datetime2 = date_create(date("Y-m-d", strtotime($value->Event_Date)));
-			$interval = date_diff($datetime1, $datetime2);
-			$day_diff = $interval->format("%R%a");
-			
-			/* Creating content to return in block
-			*	Event logic:
-			*	- Event in future display: 12 days left until event starts.
-			*	- Event in past display: This event already passed.
-			*	- Event happening today display: This event is happening today.
-			*/
-			if ($day_diff == 0){
-				$content .= "<h1>" . $value->Event_Title . " </h1> <p>Date: " . $value->Event_Date . "</p><p>This event is happening today</p><hr/>";
-			} else if ($day_diff < 0) {
-				$content .= "<h1>" . $value->Event_Title . "</h1> <p>Date: " . $value->Event_Date . "</p><p> This event already passed.</h4><p><hr/>";
-			} else if ($day_diff > 0) {
-				$content .= "<h1>" . $value->Event_Title . "</h1> <p>Date: " . $value->Event_Date . "</p><p>" . $day_diff . " days left until event starts</p><hr/>";
+	/*
+	* Checking if node type is event
+	*/
+	if($node->getType() == "event") {
+		
+		/* 
+		*	Get node ID and Title
+		*/
+		$nid = $node->id();
+		$title = $node->getTitle() . ' Status';
+		
+		/*
+		*	Collect events date based on node ID
+		*/
+		$connection = \Drupal::database();
+		$db_result = $connection->select('node__field_event_date', 'n')
+			->condition('n.entity_id', $nid, '=')
+			->fields('n', array('field_event_date_value'))
+			->execute();
+		
+		$result = $db_result->fetchAll();		
+		
+		/*
+		*	Checking if DB result has value
+		*/
+		if (!empty($result)) {		
+			foreach($result as $value){	
+				/*
+				*	Call to custom service to calculate date difference, passing events date in strtotime format 
+				*/
+				$event_date = date_create(date("Y-m-d", strtotime($value->field_event_date_value)));
+				$respond = $service->daysUntilEventStarts($event_date); 
 			}
+		} else {
+			$respond = "There is no event information available!";
 		}
 	} else {
-		$content = "There is not event information available!";
+		$respond = "This is not event.";
 	}
 	
     return [
-	  '#title' => 'Events Status',
-      '#markup' => t($content),
+	  '#title' => t($title),
+      '#markup' => t($respond),
 	  '#cache' => [
         'max-age' => 0, // no cache please
       ]

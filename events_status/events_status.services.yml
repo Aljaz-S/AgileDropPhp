@@ -1,0 +1,3 @@
+services:
+  events_status.date_calculator:
+    class: Drupal\events_status\DateCalculator
