@@ -13,11 +13,11 @@ class DateCalculator {
 		$difference = round(date_diff($now, $event_date)->format("%R%a"));
 
 		if ($difference == 0){
-			return "<p>This event is happening today</p>";
+			return "This event is happening today.";
 		} else if ($difference < 0) {
-			return "<p> This event already passed.</h4><p>";
+			return "This event already passed.";
 		} else if ($difference > 0) {
-			return "<p>" . $difference . " days left until event starts</p>";
+			return $difference . " days left until event starts";
 		}
 	}
 }

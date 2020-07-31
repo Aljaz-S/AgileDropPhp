@@ -8,6 +8,9 @@ Custom block which will be displayed in the sidebar on event pages. The block is
 --------------------------------
 VERSION
 --------------------------------
+- 1.2 
+	- Update of plugin to display on all pages
+	
 - 1.1 
 	- Module logic devided to display only on single event nodes 
 	- Added new services DateCalculator

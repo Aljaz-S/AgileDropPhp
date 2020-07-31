@@ -27,47 +27,54 @@ class EventsStatus extends BlockBase {
 	*/
 	$node = \Drupal::routeMatch()->getParameter('node');
 	$service = \Drupal::service('events_status.date_calculator');
-	
-	/*
-	* Checking if node type is event
-	*/
-	if($node->getType() == "event") {
-		
-		/* 
-		*	Get node ID and Title
-		*/
-		$nid = $node->id();
-		$title = $node->getTitle() . ' Status';
-		
+
+	if ($node instanceof \Drupal\node\NodeInterface) {
+
 		/*
-		*	Collect events date based on node ID
+		* Checking if node type is event
 		*/
-		$connection = \Drupal::database();
-		$db_result = $connection->select('node__field_event_date', 'n')
-			->condition('n.entity_id', $nid, '=')
-			->fields('n', array('field_event_date_value'))
-			->execute();
-		
-		$result = $db_result->fetchAll();		
-		
-		/*
-		*	Checking if DB result has value
-		*/
-		if (!empty($result)) {		
-			foreach($result as $value){	
-				/*
-				*	Call to custom service to calculate date difference, passing events date in strtotime format 
-				*/
-				$event_date = date_create(date("Y-m-d", strtotime($value->field_event_date_value)));
-				$respond = $service->daysUntilEventStarts($event_date); 
+		if($node->getType() == "event") {
+
+			/*
+			*	Get node ID and Title
+			*/
+			$nid = $node->id();
+			$title = $node->getTitle() . ' Status';
+
+			/*
+			*	Collect events date based on node ID
+			*/
+			$connection = \Drupal::database();
+			$db_result = $connection->select('node__field_event_date', 'n')
+					->condition('n.entity_id', $nid, '=')
+					->fields('n', array('field_event_date_value'))
+					->execute();
+
+			$result = $db_result->fetchAll();
+
+			/*
+			*	Checking if DB result has value
+			*/
+			if (!empty($result)) {
+				foreach($result as $value){
+					/*
+					*	Call to custom service to calculate date difference, passing events date in strtotime format
+					*/
+					$event_date = date_create(date("Y-m-d", strtotime($value->field_event_date_value)));
+					$respond = $service->daysUntilEventStarts($event_date);
+				}
+			} else {
+				$respond = "There is no event information available!";
 			}
 		} else {
-			$respond = "There is no event information available!";
+			$title = $node->getTitle();
+			$respond = "This is not event.";
 		}
 	} else {
-		$respond = "This is not event.";
+		$title = "Events Status";
+		$respond = "I suggest to define this block to only display on event type content.";
 	}
-	
+
     return [
 	  '#title' => t($title),
       '#markup' => t($respond),
